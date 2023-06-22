@@ -1,24 +1,32 @@
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.message === "html_content") {
-    sendToChatGPT(request.content, function(response) {
-      sendResponse({ message: "chat_response", response: response });
+// background.js
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.message === 'data_extraction') {
+    // Send the extracted data to ChatGPT and handle the response
+    sendToChatGPT(request.data, function (response) {
+      // Send the response back to the content script
+      sendResponse({ message: 'chat_response', response: response });
     });
+
+    // Return true to indicate that the response will be sent asynchronously
     return true;
   }
 });
 
-function sendToChatGPT(content, callback) {
-  const apiKey = "YOUR_OPENAI_API_KEY";
-  const apiUrl = "https://api.openai.com/v1/engines/davinci-codex/completions";
+function sendToChatGPT(data, callback) {
+  // Make the API request to ChatGPT using the extracted data
+  // Replace 'YOUR_OPENAI_API_KEY' with your actual OpenAI API key
+  const apiKey = 'YOUR_OPENAI_API_KEY';
+  const apiUrl = 'https://api.openai.com/v1/engines/davinci-codex/completions';
 
   fetch(apiUrl, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
     },
     body: JSON.stringify({
-      prompt: content,
+      prompt: data,
       max_tokens: 50
     })
   })
@@ -28,8 +36,8 @@ function sendToChatGPT(content, callback) {
       callback(chatResponse);
     })
     .catch(error => {
-      console.error("Error:", error);
-      callback("An error occurred while processing the request.");
+      console.error('Error:', error);
+      callback('An error occurred while processing the request.');
     });
 }
 

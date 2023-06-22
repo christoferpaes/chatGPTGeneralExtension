@@ -1,23 +1,23 @@
 {
   "manifest_version": 2,
-  "name": "ChatGPT Webpage Interaction",
+  "name": "ChatGPT Generalized",
   "version": "1.0",
-  "description": "Interact with ChatGPT using webpage content",
-  "permissions": [
-    "activeTab"
-  ],
+  "description": "ChatGPT Generalized Extension",
+  "permissions": ["activeTab"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
+      "matches": ["<all_urls>"],
       "js": ["content.js"],
       "run_at": "document_end"
     }
-  ],
+  ]
+ ,
   "browser_action": {
-    "default_popup": "popup.html"
-  }
+  
+  },
+  "manifest_version": 2
 }
